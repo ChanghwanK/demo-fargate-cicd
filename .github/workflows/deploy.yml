@@ -46,7 +46,7 @@ jobs:
         id: loin-ecr
         uses: aws-actions/amazon-ecr-login@v1
       - name: DOCKER IMAGE BUILD & PUSH
-        id: build-docker-image
+        id: build-image
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
           IMAGE_TAG: dev
@@ -59,7 +59,7 @@ jobs:
         with:
           task-definition: ${{ env.TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-docker-image.outputs.image }}
+          image: ${{ steps.build-image.outputs.image }}
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
