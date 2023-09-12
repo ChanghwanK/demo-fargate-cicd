@@ -54,8 +54,8 @@ jobs:
 #          docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG} .
 #          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
         run: |
-          docker-compose build greeting-be
-          docker tag greeting-be:latest $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
+          docker-compose build greeting-app
+          docker tag greeting-app:latest $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
       - name: ECS task definition
         id: task-definition

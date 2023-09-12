@@ -1,13 +1,13 @@
 version: "3.7"
 
 services:
-  greeting-be:
+  greeting-app:
     build:
       context: .
       dockerfile: Dockerfile
+    image: greeting-app
     ports:
       - "8080:8080"
-    container_name: greeting-be-service
     expose:
       - "8080"
     environment:
