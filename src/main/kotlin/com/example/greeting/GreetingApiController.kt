@@ -8,6 +8,6 @@ class GreetingApiController {
 
     @GetMapping("/api/greeting")
     fun greeting(): String {
-        return "Hello, World V11!!"
+        return "Hello, World V12!!"
     }
 }

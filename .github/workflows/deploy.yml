@@ -10,13 +10,10 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   ECR_REPOSITORY_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}
-#  SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
-#  CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-#  TASK_DEFINITION: ${{ secrets.TASK_DEFINITION }}
-#  CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
-#  LOG_GROUP_NAME: ${{ secrets.LOG_GROUP_NAME }}
-#  LOG_STREAM_PREFIX: ${{ secrets.LOG_STREAM_PREFIX }}
-
+  SERVICE_NAME: ev-greeting-service-v3
+  CLUSTER_NAME: dev-greeting-cluster
+  TASK_DEFINITION: prod-greeting-service-task-def
+  CONTAINER_NAME: greeting-app
 
 jobs:
   job:
@@ -48,7 +45,7 @@ jobs:
       - name: Login to Amazon ECR
         id: loin-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: docker build
+      - name: DOCKER IMAGE BUILD & PUSH
         id: build-docker-image
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
@@ -56,25 +53,18 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG} .
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
-      
-
-#      - name: Deploy to Amazon ECS
-#        id: task-deploy
-#        uses: aws-actions/amazon-ecs-render-task-definition@v1
-#        with:
-#          task-definition: ${{ secrets.TASK_DEFINITION }}
-#          container-name: ${{ secrets.CONTAINER_NAME }}
-#          image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-#          aws-region: ap-northeast-2
-#          log-group-name: ${{ secrets.LOG_GROUP_NAME }}
-#          log-stream-prefix: ${{ secrets.LOG_STREAM_PREFIX }}
-#      - name:
-#        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-#        with:
-#          task-definition: ${{ secrets.TASK_DEFINITION }}
-#          service: ${{ secrets.SERVICE_NAME }}
-#          cluster: ${{ secrets.CLUSTER_NAME }}
-#          wait-for-service-stability: true
-#          aws-region: ap-northeast-2
-
+      - name: ECS task definition
+        id: task-definition
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-docker-image.outputs.image }}
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-definition.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
 
