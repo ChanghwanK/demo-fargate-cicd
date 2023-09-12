@@ -12,7 +12,7 @@ env:
   ECR_REPOSITORY_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}
   SERVICE_NAME: ev-greeting-service-v3
   CLUSTER_NAME: dev-greeting-cluster
-  TASK_DEFINITION: prod-greeting-service-task-def
+  TASK_DEFINITION: prod-greeting-service-task-def.json
   CONTAINER_NAME: greeting-app
 
 jobs:
@@ -59,7 +59,6 @@ jobs:
         with:
           task-definition: ${{ env.TASK_DEFINITION }}
           container-name: ${{ env.CONTAINER_NAME }}
-#          image: ${{ steps.build-image.outputs.devs }}
           image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:dev
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
