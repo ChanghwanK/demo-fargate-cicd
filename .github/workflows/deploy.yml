@@ -50,8 +50,12 @@ jobs:
         env:
           ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
           IMAGE_TAG: dev
+#        run: |
+#          docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG} .
+#          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
         run: |
-          docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG} .
+          docker-compose build greeting-be
+          docker tag greeting-be:latest $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
       - name: ECS task definition
         id: task-definition
