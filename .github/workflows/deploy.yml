@@ -10,10 +10,10 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   ECR_REPOSITORY_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}
-  SERVICE_NAME: ev-greeting-service-v3
-  CLUSTER_NAME: dev-greeting-cluster
   TASK_DEFINITION: prod-greeting-service-task-def.json
   CONTAINER_NAME: greeting-app
+  ECS_SERVICE: dev-greeting-service-v3
+  ECS_CLUSTER: dev-greeting-cluster
 
 jobs:
   job:
