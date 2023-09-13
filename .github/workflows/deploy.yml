@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - main
-  merge:
+  pull_request:
     branches:
       - main
-
+    types: [closed]
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
