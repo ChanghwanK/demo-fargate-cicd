@@ -10,10 +10,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   ECR_REPOSITORY_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}
-  TASK_DEFINITION: prod-greeting-service-task-def.json
   CONTAINER_NAME: greeting-app
-  ECS_SERVICE: dev-greeting-service-v3
-  ECS_CLUSTER: dev-greeting-cluster
 
 jobs:
   job:
@@ -54,4 +51,3 @@ jobs:
           docker-compose build greeting-app
           docker tag greeting-app:latest $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
-#
