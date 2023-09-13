@@ -45,13 +45,13 @@ jobs:
       - name: Login to Amazon ECR
         id: loin-ecr
         uses: aws-actions/amazon-ecr-login@v1
-#      - name: DOCKER IMAGE BUILD & PUSH
-#        id: build-image
-#        env:
-#          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
-#          IMAGE_TAG: dev
-#        run: |
-#          docker-compose build greeting-app
-#          docker tag greeting-app:latest $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
-#          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
+      - name: DOCKER IMAGE BUILD & PUSH
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
+          IMAGE_TAG: dev
+        run: |
+          docker-compose build greeting-app
+          docker tag greeting-app:latest $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
+          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY_NAME }}:${IMAGE_TAG}
 #
